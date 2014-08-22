@@ -166,7 +166,7 @@
             </div>
             <div class="row">
                 {% for k, d in data.items() %}
-                            <p><a href="/{{k}}.xspf">{{k}}</a>, last updated {{d["last_updated"]}}</p>
+                            <p><a href="/{{k}}.xspf">{{k}}</a>, <small>last updated {{d["last_updated"]}}</small></p> <button type="button" class="btn btn-success btn-xs" href="tomahawk://import/playlist?xspf=/{{k}}.xspf">Add to Tomahawk</button>
                             {% end %}
 
                             <!--
@@ -324,14 +324,21 @@
                         <div class="modal-body">
                             <h2>Pitchfork: Best New Tracks</h2>
                             <hr class="star-primary">
-                            <a href="tomahawk://import/playlist?xspf=http://spinb.in/Pitchfork%20Best%20New%20Tracks.xspf"><img src="static/img/portfolio/pitchfork.png" class="img-responsive img-centered" alt=""></a>
+                            <img src="static/img/portfolio/pitchfork.png" class="img-responsive img-centered" alt="">
                             <p>Pitchfork regularly adds their best reviewed tracks to this playlist.</p>
                             <ul class="list-inline item-details">
                                 <li>Source:
                                     <strong><a href="http://pitchfork.com/reviews/best/tracks/">Pitchfork</a>
                                     </strong>
                                 </li>
+                                <li>XSPF:
+                                    <strong><a href="http://spinb.in/Pitchfork%20Best%20New%20Tracks.xspf">http://spinb.in/Pitchfork%20Best%20New%20Tracks.xspf</a>
+                                    </strong>
+                                </li>
                             </ul>
+                            
+                            <button type="button" class="btn btn-success" href="tomahawk://import/playlist?xspf=http://spinb.in/Pitchfork%20Best%20New%20Tracks.xspf">Add to Tomahawk</button>
+
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
@@ -353,14 +360,19 @@
                         <div class="modal-body">
                             <h2>Wonder.fm</h2>
                             <hr class="star-primary">
-                            <a href="tomahawk://import/playlist?xspf=http://spinb.in/Wonderfm.xspf"><img src="static/img/portfolio/wonderfm.png" class="img-responsive img-centered" alt=""></a>
+                            <img src="static/img/portfolio/wonderfm.png" class="img-responsive img-centered" alt="">
                             <p>Wonder.fm tracks the most popular tracks on SoundCloud.</p>
                             <ul class="list-inline item-details">
                                 <li>Source:
                                     <strong><a href="http://wonder.fm">Wonder.fm</a>
                                     </strong>
                                 </li>
+                                <li>XSPF:
+                                    <strong><a href="http://spinb.in/Wonderfm.xspf">http://spinb.in/Wonderfm.xspf</a>
+                                    </strong>
+                                </li>
                             </ul>
+                            <button type="button" class="btn btn-success" href="tomahawk://import/playlist?xspf=http://spinb.in/Wonderfm.xspf">Add to Tomahawk</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
@@ -382,14 +394,19 @@
                         <div class="modal-body">
                             <h2>Billboard: Hot 100</h2>
                             <hr class="star-primary">
-                            <a href="tomahawk://import/playlist?xspf=http://spinb.in/Billboard%20Hot%20100.xspf"><img src="static/img/portfolio/billboard.png" class="img-responsive img-centered" alt=""></a>
+                           <img src="static/img/portfolio/billboard.png" class="img-responsive img-centered" alt="">
                             <p>Billboard's Hot 100 tracks the biggest selling (and streaming) songs in America.</p>
                             <ul class="list-inline item-details">
                                 <li>Source:
                                     <strong><a href="http://www.billboard.com/charts/hot-100">Billboard</a>
                                     </strong>
                                 </li>
+                                <li>XSPF:
+                                    <strong><a href="http://spinb.in/Billboard%20Hot%20100.xspf">http://spinb.in/Billboard%20Hot%20100.xspf</a>
+                                    </strong>
+                                </li>
                             </ul>
+                            <button type="button" class="btn btn-success" href="tomahawk://import/playlist?xspf=http://spinb.in/Billboard%20Hot%20100.xspf">Add to Tomahawk</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
@@ -411,14 +428,19 @@
                         <div class="modal-body">
                             <h2>Twitter: Trending 140</h2>
                             <hr class="star-primary">
-                            <a href="tomahawk://import/playlist?xspf=http://spinb.in/Billboard%20Twitter%20Chart.xspf"><img src="static/img/portfolio/twitter.png" class="img-responsive img-centered" alt="Click for .xspf" ></a>
+                            <img src="static/img/portfolio/twitter.png" class="img-responsive img-centered" alt="" >
                             <p>Billboard and Twitter track the hottest trending tracks across the social network.
                             <ul class="list-inline item-details">
-                                <li>Client:
+                                <li>Source:
                                     <strong><a href="http://realtime.billboard.com/?chart=trending140">Billboard</a>
                                     </strong>
                                 </li>
+                                <li>XSPF:
+                                    <strong><a href="http://spinb.in/Billboard%20Twitter%20Chart.xspf">http://spinb.in/Billboard%20Twitter%20Chart.xspf</a>
+                                    </strong>
+                                </li>
                             </ul>
+                            <button type="button" class="btn btn-success" href="tomahawk://import/playlist?xspf=http://spinb.in/Billboard%20Twitter%20Chart.xspf">Add to Tomahawk</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
@@ -440,14 +462,19 @@
                         <div class="modal-body">
                             <h2>iTunes: Top 100</h2>
                             <hr class="star-primary">
-                            <a href="tomahawk://import/playlist?xspf=http://spinb.in/iTunes%20Top%20Songs.xspf"><img src="static/img/portfolio/itunes.png" class="img-responsive img-centered" alt=""></a>
+                            <img src="static/img/portfolio/itunes.png" class="img-responsive img-centered" alt="">
                             <p>Apple iTunes list of most downloaded songs.</p>
                             <ul class="list-inline item-details">
                                 <li>Source:
                                     <strong><a href="http://www.apple.com/itunes/charts/songs/">Apple</a>
                                     </strong>
                                 </li>
+                                <li>XSPF:
+                                    <strong><a href="http://www.apple.com/itunes/charts/songs/">http://www.apple.com/itunes/charts/songs/</a>
+                                    </strong>
+                                </li>
                             </ul>
+                            <button type="button" class="btn btn-success" href="tomahawk://import/playlist?xspf=http://spinb.in/iTunes%20Top%20Songs.xspf">Add to Tomahawk</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
@@ -469,14 +496,19 @@
                         <div class="modal-body">
                             <h2>Last.fm: Hyped Tracks (US)</h2>
                             <hr class="star-primary">
-                            <a href="tomahawk://import/playlist?xspf=http://spinb.in/Lastfm%20Hyped%20Tracks.xspf"><img src="static/img/portfolio/lastfm.png" class="img-responsive img-centered" alt=""></a>
+                            <img src="static/img/portfolio/lastfm.png" class="img-responsive img-centered" alt="">
                             <p>Last.fm's list of hottest trending tracks (by plays) in America.</p>
                             <ul class="list-inline item-details">
-                                <li>Client:
+                                <li>Source:
                                     <strong><a href="http://www.last.fm/charts/tracks/hyped/place/United+States">Last.fm</a>
                                     </strong>
                                 </li>
+                                <li>XSPF:
+                                    <strong><a href="http://spinb.in/Lastfm%20Hyped%20Tracks.xspf">http://spinb.in/Lastfm%20Hyped%20Tracks.xspf</a>
+                                    </strong>
+                                </li>
                             </ul>
+                            <button type="button" class="btn btn-success" href="tomahawk://import/playlist?xspf=http://spinb.in/Lastfm%20Hyped%20Tracks.xspf">Add to Tomahawk</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
