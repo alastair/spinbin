@@ -88,25 +88,12 @@
     <!-- Portfolio Grid Section -->
     <section id="portfolio">
         <div class="container">
-            <div class="row">
+              <div class="row">
                 <div class="col-lg-12 text-center">
 
-                    <h2>Newest Playlists</h2>
+                    <h2>Featured Playlists</h2>
                     <hr class="star-primary">
                 </div>
-            </div>
-            <div class="row">
-                {% for k, d in data.items() %}
-                            <p><a href="/{{k}}.xspf">{{k}}</a>, last updated {{d["last_updated"]}}</p>
-                            {% end %}
-
-                            <!--
-                            <h3>Add more</h3>
-                            <form method="POST" action="/add">
-                                Kimono url: <input type="text" name="url"><br>
-                                <input type="submit">
-                            </form>
-                            -->
             </div>
             <div class="row">
                 <div class="col-sm-4 portfolio-item">
@@ -169,6 +156,26 @@
                         <img src="img/portfolio/submarine.png" class="img-responsive" alt="">
                     </a>
                 </div>
+                 <div class="row">
+                <div class="col-lg-12 text-center">
+
+                    <h2>Latest Playlists</h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+            <div class="row">
+                {% for k, d in data.items() %}
+                            <p><a href="/{{k}}.xspf">{{k}}</a>, last updated {{d["last_updated"]}}</p>
+                            {% end %}
+
+                            <!--
+                            <h3>Add more</h3>
+                            <form method="POST" action="/add">
+                                Kimono url: <input type="text" name="url"><br>
+                                <input type="submit">
+                            </form>
+                            -->
+            </div>
             </div>
         </div>
     </section>
