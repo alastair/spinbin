@@ -1,0 +1,18 @@
+<html>
+    <head><title>xspfy!</title></head>
+    <body>
+        <h3>Playlists</h3>
+        {% for k, d in data.items() %}
+        <p><a href="/{{k}}.xspf">{{k}}</a>, last updated {{d["last_updated"]}}</p>
+        {% end %}
+
+        <!--
+        <h3>Add more</h3>
+        <form method="POST" action="/add">
+            Kimono url: <input type="text" name="url"><br>
+            <input type="submit">
+        </form>
+        -->
+
+    </body>
+</html>
