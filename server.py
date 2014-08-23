@@ -9,17 +9,42 @@ import tornado.ioloop
 import tornado.web
 
 import kimono
+from dateutil import parser
+import datetime
 
 FILE_PATH = "files"
 
+try:
+    datamap = json.load(open("kimono.json"))
+except IOError:
+    datamap = {}
+except ValueError:
+    datamap = {}
+
 class RootHandler(tornado.web.RequestHandler):
     def get(self):
-        try:
-            d = json.load(open("kimono.json"))
-        except IOError:
-            d = {}
-        except ValueError:
-            d = {}
+        d = []
+        for k, v in datamap.items():
+            if v["last_updated"]:
+                v["date"] = parser.parse(v["last_updated"])
+                now = datetime.datetime.now(v["date"].tzinfo)
+                delta = now - v["date"]
+                if delta.days:
+                    dstr = "%s day%s ago" % (delta.days, "" if delta.days == 1 else "s")
+                elif delta.seconds > 3600:
+                    hr = delta.seconds / 3600
+                    dstr = "%s hour%s ago" % (hr, "" if hr == 1 else "s")
+                elif delta.seconds <= 600:
+                    dstr = "recently"
+                else:
+                    m = delta.seconds / 600 * 600
+                    dstr = "%s minutes ago"
+            else:
+                dstr = "unknown"
+                v["date"] = None
+            v["updatedstr"] = dstr
+            d.append((k, v))
+        d = sorted(d, key=lambda k: k[1]["date"], reverse=True)
         return self.render("index.html", data=d)
 
 class AddHandler(tornado.web.RequestHandler):
@@ -27,16 +52,13 @@ class AddHandler(tornado.web.RequestHandler):
         data = json.loads(self.request.body)
         print "adding data"
         print data
-        kimono.add(data)
+        r = kimono.add(data)
+        if r:
+            key, data = r
+            print "added key", key
+            datamap[key] = data
+            json.dump(datamap, open("kimono.json", "w"))
         self.write(":)")
-
-class PipeHandler(tornado.web.RequestHandler):
-    def post(self):
-        d = self.get_argument("Data")
-        print "Got data from pipe input"
-        print d
-
-        self.write({"status": "thanks!"})
 
 class FileHandler(tornado.web.RequestHandler):
     def get(self, file):
@@ -53,7 +75,6 @@ settings = {"static_path": os.path.join(os.path.dirname(__file__), "static"),
 application = tornado.web.Application([(r"/", RootHandler),
     (r"/(.*).xspf", FileHandler),
     (r"/add", AddHandler),
-    (r"/pipein", PipeHandler),
     ], **settings)
 
 def main():
