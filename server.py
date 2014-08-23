@@ -26,9 +26,11 @@ class RootHandler(tornado.web.RequestHandler):
         d = []
         for k, v in datamap.items():
             if v["last_updated"]:
-                v["date"] = parser.parse(v["last_updated"])
-                now = datetime.datetime.now(v["date"].tzinfo)
-                delta = now - v["date"]
+                out = v
+                thedate = parser.parse(v["last_updated"])
+                out["date"] = thedate
+                now = datetime.datetime.now(thedate.tzinfo)
+                delta = now - thedate
                 if delta.days:
                     dstr = "%s day%s ago" % (delta.days, "" if delta.days == 1 else "s")
                 elif delta.seconds > 3600:
@@ -37,14 +39,15 @@ class RootHandler(tornado.web.RequestHandler):
                 elif delta.seconds <= 600:
                     dstr = "recently"
                 else:
-                    m = delta.seconds / 600 * 600
-                    dstr = "%s minutes ago"
+                    m = delta.seconds / 600 * 10
+                    dstr = "%s minutes ago" % m
+
+                v["updatedstr"] = dstr
+                d.append((k, out))
             else:
-                dstr = "unknown"
-                v["date"] = None
-            v["updatedstr"] = dstr
-            d.append((k, v))
+                pass
         d = sorted(d, key=lambda k: k[1]["date"], reverse=True)
+        print d
         return self.render("index.html", data=d)
 
 class AddHandler(tornado.web.RequestHandler):
@@ -65,7 +68,7 @@ class FileHandler(tornado.web.RequestHandler):
         fname = os.path.join(FILE_PATH, "%s.xspf" % file)
         if os.path.exists(fname):
             d = open(fname).read()
-            self.add_header("Content-type", "application/xml")
+            self.set_header("Content-Type", "text/xml")
             self.write(d)
         else:
             self.write("no file?")
