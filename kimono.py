@@ -9,6 +9,8 @@ def add(data):
     x.title = data["name"]
     name = data["name"]
     last_updated = data["thisversionrun"]
+    if not last_updated:
+        last_updated = data["lastsuccess"]
     pdate = parser.parse(last_updated)
     version = data["version"]
     new = data["newdata"]
