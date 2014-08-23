@@ -172,7 +172,14 @@
                     <div class="col-lg-8 col-lg-offset-2">
 
                 {% for k, d in data.items() %}
-                            <p><a href="/{{k}}.xspf">{{k}}</a>, <small>last updated {{d["last_updated"]}}</small> <button type="button" class="btn btn-danger btn-xs" href="tomahawk://import/playlist?xspf=/{{k}}.xspf">Add to Tomahawk</button></p>
+                            <h3>
+                                <i class="fa fa-list"></i> <a href="/{{k}}.xspf"><strong>{{k}}</strong></a> <button type="button" class="btn btn-danger btn-xs" href="tomahawk://import/playlist?xspf=/{{k}}.xspf">Add to Tomahawk</button>
+                            </h3>
+                                <ul>    
+                                    <li>
+                                        <h6>last updated {{d["last_updated"]}}</h6>
+                                    </li> 
+                                </ul>
                             <br><br>
                             {% end %}
 
