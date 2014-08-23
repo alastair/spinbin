@@ -171,9 +171,9 @@
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2">
 
-                {% for k, d in data.items() %}
+                {% for k, d in data %}
                             <h3>
-                                <i class="fa fa-list"></i> <a href="/{{k}}.xspf"><strong>{{d.get("name", k)}}</strong></a> | <button type="button" class="btn btn-danger btn-xs" href="tomahawk://import/playlist?xspf=/{{k}}.xspf">Add to Tomahawk</button>
+                                <i class="fa fa-list"></i> <a href="/{{k}}.xspf"><strong>{{d.get("name", k)}}</strong></a> | <button type="button" class="btn btn-danger btn-xs" href="tomahawk://import/playlist?xspf=http://spinb.in/{{k}}.xspf">Add to Tomahawk</button>
                             </h3>
                                 <ul>    
                                     <li>
@@ -357,13 +357,8 @@
                                     </strong>
                                 </li>
                             </ul>
-<<<<<<< Updated upstream
                             
                             <button type="button" class="btn btn-danger" href="tomahawk://import/playlist?xspf=http://spinb.in/Pitchfork%20Best%20New%20Tracks.xspf">Add to Tomahawk</button>
-=======
-
-                            <button type="button" class="btn btn-success" href="tomahawk://import/playlist?xspf=http://spinb.in/Pitchfork%20Best%20New%20Tracks.xspf">Add to Tomahawk</button>
->>>>>>> Stashed changes
 
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
