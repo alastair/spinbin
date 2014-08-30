@@ -160,7 +160,36 @@
                     </a>
                 </div>
 
-                 <div class="row">
+             <div class="row">
+                <div class="col-lg-12 text-center">
+                    <br><br>
+                    <h2>Newly added playlists</h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+
+                {% for pl in by_added %}
+                            <h3>
+                                <i class="fa fa-list"></i> <a href="/{{pl.slug}}.xspf"><strong>{{pl.name}}</strong></a> | <a href="tomahawk://import/playlist?xspf=http://spinb.in/{{pl.slug}}.xspf"><button type="button" class="btn btn-danger btn-xs"> Add to Tomahawk</button></a>
+                            </h3>
+                                <ul>
+                                    <li>
+                                        <h6><a href="{{pl.url}}">View original site</a></h6>
+                                    </li>
+                                    <li>
+                                        <h6>added {{pl.format_date_added()}}</h6>
+                                    </li>
+                                </ul>
+                            <br><br>
+                            {% end %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-lg-12 text-center">
                     <br><br>
                     <h2>Recently Updated Playlists</h2>
@@ -189,34 +218,7 @@
                 </div>
             </div>
 
-                 <div class="row">
-                <div class="col-lg-12 text-center">
-                    <br><br>
-                    <h2>Newly added playlists</h2>
-                    <hr class="star-primary">
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
-
-                {% for pl in by_added %}
-                            <h3>
-                                <i class="fa fa-list"></i> <a href="/{{pl.slug}}.xspf"><strong>{{pl.name}}</strong></a> | <a href="tomahawk://import/playlist?xspf=http://spinb.in/{{pl.slug}}.xspf"><button type="button" class="btn btn-danger btn-xs"> Add to Tomahawk</button></a>
-                            </h3>
-                                <ul>
-                                    <li>
-                                        <h6><a href="{{pl.url}}">View original site</a></h6>
-                                    </li>
-                                    <li>
-                                        <h6>added {{pl.format_date_added()}}</h6>
-                                    </li>
-                                </ul>
-                            <br><br>
-                            {% end %}
-                    </div>
-                </div>
-            </div>
+                
         </div>
     </section>
 
