@@ -23,7 +23,7 @@ class RootHandler(tornado.web.RequestHandler):
         by_updated = db.playlists_by_updated()
         return self.render("index.html", by_updated=by_updated, by_added=by_added)
 
-class AddHandler(object):
+class AddHandler(tornado.web.RequestHandler):
     def process_data(self, data):
         print "adding data"
         print data
