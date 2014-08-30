@@ -2,8 +2,6 @@ import xspf
 import json
 from dateutil import parser
 
-# {"name": {"url": xxx, "last_updated": yyyymmddhhiiss, "filename": name.xspf}, ... }
-
 def add(data):
     x = xspf.Xspf()
     x.title = data["name"]
@@ -14,11 +12,12 @@ def add(data):
     pdate = parser.parse(last_updated)
     version = data["version"]
     new = data["newdata"]
-    #if not new:
-    #    return
+    if not new:
+        return
 
     x.date = pdate.strftime("%Y-%m-%dT%H:%M:%S%z")
     results = data["results"]
+    version = data["version"]
     keys = results.keys()
     if not keys:
         return
@@ -54,14 +53,17 @@ def add(data):
     if url:
         x.location = url
 
-    filename = name.replace(" ", "-").lower()
+    slug = name.replace(" ", "-").lower()
+    filename = "%s-%s.xspf" % (slug, version)
 
-    open("files/%s.xspf" % filename, "w").write(x.toXml())
+    open("files/%s" % filename, "w").write(x.toXml())
 
     resp = {}
-    resp["last_updated"] = pdate.strftime("%Y-%m-%dT%H:%M:%S%z")
-    resp["filename"] = "%s.xspf" % filename
+    resp["last_updated_str"] = pdate.strftime("%Y-%m-%dT%H:%M:%S%z")
+    resp["last_updated_obj"] = pdate
+    resp["filename"] = filename
+    resp["slug"] = slug
     resp["url"] = url
     resp["endpoint"] = data["endpoint"]
     resp["name"] = name
-    return filename, resp
+    return resp

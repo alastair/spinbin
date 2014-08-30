@@ -8,70 +8,64 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 
-import kimono
 from dateutil import parser
 import datetime
 
-FILE_PATH = "files"
+import db
+import kimono
+import tw
 
-try:
-    datamap = json.load(open("kimono.json"))
-except IOError:
-    datamap = {}
-except ValueError:
-    datamap = {}
+FILE_PATH = "files"
 
 class RootHandler(tornado.web.RequestHandler):
     def get(self):
-        d = []
-        for k, v in datamap.items():
-            if v["last_updated"]:
-                out = v
-                thedate = parser.parse(v["last_updated"])
-                out["date"] = thedate
-                now = datetime.datetime.now(thedate.tzinfo)
-                delta = now - thedate
-                if delta.days:
-                    dstr = "%s day%s ago" % (delta.days, "" if delta.days == 1 else "s")
-                elif delta.seconds > 3600:
-                    hr = delta.seconds / 3600
-                    dstr = "%s hour%s ago" % (hr, "" if hr == 1 else "s")
-                elif delta.seconds <= 600:
-                    dstr = "recently"
-                else:
-                    m = delta.seconds / 600 * 10
-                    dstr = "%s minutes ago" % m
+        by_added = db.playlists_by_added()
+        by_updated = db.playlists_by_updated()
+        return self.render("index.html", by_updated=by_updated, by_added=by_added)
 
-                v["updatedstr"] = dstr
-                d.append((k, out))
-            else:
-                pass
-        d = sorted(d, key=lambda k: k[1]["date"], reverse=True)
-        print d
-        return self.render("index.html", data=d)
-
-class AddHandler(tornado.web.RequestHandler):
-    def post(self):
-        data = json.loads(self.request.body)
+class AddHandler(object):
+    def process_data(self, data):
         print "adding data"
         print data
         r = kimono.add(data)
         if r:
-            key, data = r
-            print "added key", key
-            datamap[key] = data
-            json.dump(datamap, open("kimono.json", "w"))
+            s = r["slug"]
+            playlist = db.get_playlist(s)
+            if not playlist:
+                playlist = db.create_playlist(r["slug"])
+            playlist.url = r["url"]
+            playlist.filename = r["filename"]
+            playlist.endpoint = r["endpoint"]
+            playlist.name = r["name"]
+            playlist.date_updated = r["last_updated_obj"]
+            db.update_playlist(playlist)
+            return playlist
+        else:
+            return None
+
+    def send_tweet(self, playlist):
+        tw.send_update(playlist.name)
+
+    def post(self):
+        data = json.loads(self.request.body)
+        pl = self.process_data(self)
+        if pl:
+            send_tweet(pl)
         self.write(":)")
 
 class FileHandler(tornado.web.RequestHandler):
     def get(self, file):
-        fname = os.path.join(FILE_PATH, "%s.xspf" % file)
-        if os.path.exists(fname):
-            d = open(fname).read()
-            self.set_header("Content-Type", "text/xml")
-            self.write(d)
+        playlist = db.get_playlist(file)
+        if playlist:
+            fname = os.path.join(FILE_PATH, playlist.filename)
+            if os.path.exists(fname):
+                d = open(fname).read()
+                self.set_header("Content-Type", "text/xml")
+                self.write(d)
+            else:
+                raise tornado.web.HTTPError(404, reason="Sorry, not a playlist")
         else:
-            self.write("no file?")
+            raise tornado.web.HTTPError(404, reason="Sorry, not a playlist")
 
 settings = {"static_path": os.path.join(os.path.dirname(__file__), "static"),
         "debug": True}
