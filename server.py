@@ -26,10 +26,10 @@ class RootHandler(tornado.web.RequestHandler):
 class AddHandler(tornado.web.RequestHandler):
     def process_data(self, data):
         print "adding data"
-        print data
         r = kimono.add(data)
         if r:
             s = r["slug"]
+            print "* returned slug", s
             playlist = db.get_playlist(s)
             if not playlist:
                 playlist = db.create_playlist(r["slug"])
@@ -37,7 +37,9 @@ class AddHandler(tornado.web.RequestHandler):
             playlist.filename = r["filename"]
             playlist.endpoint = r["endpoint"]
             playlist.name = r["name"]
-            playlist.date_updated = r["last_updated_obj"]
+            d = r["last_updated_obj"]
+            d = d.replace(tzinfo=None)
+            playlist.date_updated = d
             db.update_playlist(playlist)
             return playlist
         else:
@@ -48,9 +50,9 @@ class AddHandler(tornado.web.RequestHandler):
 
     def post(self):
         data = json.loads(self.request.body)
-        pl = self.process_data(self)
+        pl = self.process_data(data)
         if pl:
-            send_tweet(pl)
+            self.send_tweet(pl)
         self.write(":)")
 
 class FileHandler(tornado.web.RequestHandler):
@@ -68,7 +70,7 @@ class FileHandler(tornado.web.RequestHandler):
             raise tornado.web.HTTPError(404, reason="Sorry, not a playlist")
 
 settings = {"static_path": os.path.join(os.path.dirname(__file__), "static"),
-        "debug": True}
+        "debug": False}
 application = tornado.web.Application([(r"/", RootHandler),
     (r"/(.*).xspf", FileHandler),
     (r"/add", AddHandler),

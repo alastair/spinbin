@@ -37,7 +37,8 @@ class Playlist(Base):
     def format_date(self, thedate):
         if not thedate:
             return "(unknown)"
-        now = datetime.datetime.now(thedate.tzinfo)
+        thedate = thedate.replace(tzinfo=None)
+        now = datetime.datetime.now()
         delta = now - thedate
         if delta.days:
             dstr = "%s day%s ago" % (delta.days, "" if delta.days == 1 else "s")
