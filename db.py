@@ -18,6 +18,7 @@ class Playlist(Base):
     id = Column(Integer, primary_key=True)
     slug = Column(String, index=True)
     name = Column(String)
+    version = Column(Integer)
     description = Column(String)
     url = Column(String)
     endpoint = Column(String)

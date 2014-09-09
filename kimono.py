@@ -10,16 +10,14 @@ def add(data):
     if not last_updated:
         last_updated = data["lastsuccess"]
     pdate = parser.parse(last_updated)
-    version = data["version"]
     new = data["newdata"]
-    if not new:
-        return
 
     x.date = pdate.strftime("%Y-%m-%dT%H:%M:%S%z")
     results = data["results"]
     version = data["version"]
     keys = results.keys()
     if not keys:
+        " * Cannot find any data?!"
         return
 
     url = None
@@ -66,4 +64,5 @@ def add(data):
     resp["url"] = url
     resp["endpoint"] = data["endpoint"]
     resp["name"] = name
+    resp["version"] = version
     return resp

@@ -33,17 +33,19 @@ class AddHandler(tornado.web.RequestHandler):
             playlist = db.get_playlist(s)
             if not playlist:
                 playlist = db.create_playlist(r["slug"])
-            playlist.url = r["url"]
-            playlist.filename = r["filename"]
-            playlist.endpoint = r["endpoint"]
-            playlist.name = r["name"]
-            d = r["last_updated_obj"]
-            d = d.replace(tzinfo=None)
-            playlist.date_updated = d
-            db.update_playlist(playlist)
-            return playlist
-        else:
-            return None
+            version = r["version"]
+            if version > playlist.version:
+                playlist.url = r["url"]
+                playlist.version = version
+                playlist.filename = r["filename"]
+                playlist.endpoint = r["endpoint"]
+                playlist.name = r["name"]
+                d = r["last_updated_obj"]
+                d = d.replace(tzinfo=None)
+                playlist.date_updated = d
+                db.update_playlist(playlist)
+                return playlist
+        return None
 
     def send_tweet(self, playlist):
         tw.send_update(playlist.name)
