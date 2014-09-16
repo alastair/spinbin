@@ -1,13 +1,16 @@
 import xspf
 import json
 from dateutil import parser
+import os
 
 def add(data):
     x = xspf.Xspf()
     x.title = data["name"]
     name = data["name"]
+    print "playlist", name
     last_updated = data["thisversionrun"]
     if not last_updated:
+        print " - LAST UPDATED WAS NULL"
         last_updated = data["lastsuccess"]
     pdate = parser.parse(last_updated)
     new = data["newdata"]
@@ -17,7 +20,7 @@ def add(data):
     version = data["version"]
     keys = results.keys()
     if not keys:
-        " * Cannot find any data?!"
+        print " * no results, skipping"
         return
 
     url = None
@@ -54,7 +57,8 @@ def add(data):
     slug = name.replace(" ", "-").lower()
     filename = "%s-%s.xspf" % (slug, version)
 
-    open("files/%s" % filename, "w").write(x.toXml())
+    if not os.path.exists(os.path.join("files", filename)):
+        open("files/%s" % filename, "w").write(x.toXml())
 
     resp = {}
     resp["last_updated_str"] = pdate.strftime("%Y-%m-%dT%H:%M:%S%z")
