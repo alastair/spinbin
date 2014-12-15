@@ -8,7 +8,7 @@ def add(data):
     x.title = data["name"]
     name = data["name"]
     print "playlist", name
-    last_updated = data["thisversionrun"]
+    last_updated = data.get("thisversionrun")
     if not last_updated:
         print " - LAST UPDATED WAS NULL"
         last_updated = data["lastsuccess"]
