@@ -7,58 +7,20 @@ import json
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
+import tornado.wsgi
 
 from dateutil import parser
 import datetime
 
 import db
-import kimono
-import tw
 
-FILE_PATH = "files"
+FILE_PATH = "/files"
 
 class RootHandler(tornado.web.RequestHandler):
     def get(self):
         by_added = db.playlists_by_added()
         by_updated = db.playlists_by_updated()
         return self.render("index.html", by_updated=by_updated, by_added=by_added)
-
-class AddHandler(tornado.web.RequestHandler):
-    def process_data(self, data):
-        print "adding data"
-        r = kimono.add(data)
-        newly_added = False
-        if r:
-            s = r["slug"]
-            print "* returned slug", s
-            playlist = db.get_playlist(s)
-            if not playlist:
-                newly_added = True
-                playlist = db.create_playlist(r["slug"])
-            version = r["version"]
-            if version > playlist.version:
-                print "new version. was", playlist.version, "now", version
-                playlist.url = r["url"]
-                playlist.version = version
-                playlist.filename = r["filename"]
-                playlist.endpoint = r["endpoint"]
-                playlist.name = r["name"]
-                d = r["last_updated_obj"]
-                d = d.replace(tzinfo=None)
-                playlist.date_updated = d
-                db.update_playlist(playlist)
-                return newly_added, playlist
-        return None, None
-
-    def send_tweet(self, playlist):
-        tw.send_update(playlist.name)
-
-    def post(self):
-        data = json.loads(self.request.body)
-        newly_added, pl = self.process_data(data)
-        if newly_added:
-            self.send_tweet(pl)
-        self.write(":)")
 
 class FileHandler(tornado.web.RequestHandler):
     def get(self, file):
@@ -78,8 +40,9 @@ settings = {"static_path": os.path.join(os.path.dirname(__file__), "static"),
         "debug": False}
 application = tornado.web.Application([(r"/", RootHandler),
     (r"/(.*).xspf", FileHandler),
-    (r"/add", AddHandler),
     ], **settings)
+
+wapp = tornado.wsgi.WSGIAdapter(application)
 
 def main():
     server = tornado.httpserver.HTTPServer(application)
