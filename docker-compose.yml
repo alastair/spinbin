@@ -1,0 +1,11 @@
+version: "3.2"
+services:
+  web:
+    image: spinbin
+    ports:
+      - "127.0.0.1:8200:8000"
+    command: dumb-init uwsgi --die-on-term /code/uwsgi.ini
+    volumes:
+      - type: bind
+        source: ./files
+        target: /files
